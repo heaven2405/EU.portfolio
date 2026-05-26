@@ -1,0 +1,1727 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: black;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+button,
+a {
+  font: inherit;
+  cursor: none;
+}
+
+button {
+  background: none;
+  border: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#bg-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+canvas {
+  display: block;
+}
+
+/* =========================
+   CURSOR
+========================= */
+
+.cursor {
+  position: fixed;
+  width: 16px;
+  height: 16px;
+  border: 1px solid white;
+  background: white;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+  transition: width 0.25s ease, height 0.25s ease;
+}
+
+.cursor.hover {
+  width: 42px;
+  height: 42px;
+}
+
+.cursor-trail {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.4;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+  animation: trailFade 0.8s ease-out forwards;
+}
+
+@keyframes trailFade {
+  from {
+    opacity: 0.4;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2.8);
+  }
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 300;
+  padding: 30px 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  mix-blend-mode: difference;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  letter-spacing: -2px;
+  color: white;
+}
+
+nav {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+}
+
+nav a,
+nav button {
+  color: white;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+/* =========================
+   LANDING
+========================= */
+
+.landing {
+  height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+.landing-center {
+  text-align: center;
+  mix-blend-mode: difference;
+}
+
+.landing-fields {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 20px !important;
+  letter-spacing: 6px !important;
+  text-transform: uppercase;
+  font-style: italic !important;
+  opacity: 0.85 !important;
+}
+
+.landing-title {
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: clamp(58px, 10vw, 145px);
+  font-weight: 300;
+  letter-spacing: -6px;
+  transition: 0.35s ease;
+}
+
+.landing-title:hover {
+  letter-spacing: 6px;
+  transform: scale(1.03);
+}
+
+.landing-name {
+  margin-top: 18px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 22px;
+  letter-spacing: 2px;
+  opacity: 0.75;
+}
+
+/* =========================
+   FOOTER ACCUEIL
+========================= */
+
+.site-footer {
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 120;
+  text-align: center;
+  mix-blend-mode: difference;
+}
+
+.footer-links {
+  display: flex;
+  gap: 34px;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.footer-links a {
+  color: white;
+  font-size: 14px;
+  transition: 0.3s ease;
+}
+
+.footer-links a:hover {
+  opacity: 0.6;
+}
+
+.site-footer p {
+  color: white;
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+body.space-open .site-footer,
+body.space-open .landing {
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.4s ease;
+}
+
+/* =========================
+   PORTFOLIO PAGE
+========================= */
+
+.portfolio-dark {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+  color: white;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.portfolio-dark.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  animation: openSpace 1.1s cubic-bezier(.77, 0, .18, 1) forwards;
+}
+
+@keyframes openSpace {
+  from {
+    clip-path: ellipse(0% 0% at 50% 50%);
+  }
+
+  to {
+    clip-path: ellipse(140% 140% at 50% 50%);
+  }
+}
+
+.portfolio-dark::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12), transparent 35%),
+    radial-gradient(circle at 20% 70%, rgba(255,255,255,0.06), transparent 35%),
+    radial-gradient(circle at 80% 30%, rgba(255,255,255,0.07), transparent 35%);
+  filter: blur(20px);
+  animation: waveBreath 7s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes waveBreath {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.45;
+  }
+
+  50% {
+    transform: scale(1.2) rotate(8deg);
+    opacity: 0.9;
+  }
+}
+
+.portfolio-close,
+#closePortfolio {
+  display: none !important;
+}
+
+.portfolio-layout-ref {
+  position: relative;
+  z-index: 210;
+  height: 100vh;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  align-items: center;
+  gap: 35px;
+  padding: 130px 70px 95px 70px;
+  overflow: hidden;
+}
+
+/* =========================
+   TITRE HAUT PORTFOLIO
+========================= */
+
+.portfolio-section-header {
+  position: fixed;
+  top: 86px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 950;
+  text-align: center;
+  pointer-events: none;
+}
+
+.portfolio-section-header h1 {
+  color: white;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(44px, 6vw, 92px);
+  font-weight: 400;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.portfolio-section-header h1 span {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  letter-spacing: 8px;
+  opacity: 0.42;
+  margin-left: 18px;
+}
+
+body.project-selected .portfolio-section-header {
+  top: 92px;
+}
+
+body.project-selected .portfolio-section-header h1 {
+  font-size: clamp(28px, 3vw, 48px);
+  letter-spacing: 4px;
+}
+
+/* =========================
+   COLONNE GAUCHE
+========================= */
+
+.project-subtitles {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: flex-start;
+  max-height: 65vh;
+  overflow-y: auto;
+  padding-right: 10px;
+  align-self: center;
+  scroll-behavior: smooth;
+}
+
+.project-subtitles::-webkit-scrollbar,
+.project-image-group::-webkit-scrollbar,
+.gallery-grid::-webkit-scrollbar {
+  width: 4px;
+}
+
+.project-subtitles::-webkit-scrollbar-thumb,
+.project-image-group::-webkit-scrollbar-thumb,
+.gallery-grid::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.25);
+}
+
+.project-subtitles::-webkit-scrollbar-track,
+.project-image-group::-webkit-scrollbar-track,
+.gallery-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.project-subtitles button {
+  color: rgba(255,255,255,0.78);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 19px;
+  letter-spacing: 0.5px;
+  text-align: left;
+  transition: 0.3s ease;
+}
+
+.project-subtitles button:hover,
+.project-subtitles button.active-subtitle {
+  color: white;
+  text-decoration: underline;
+  transform: translateX(8px);
+}
+
+.back-portfolio-home,
+.back-projects {
+  font-size: 14px !important;
+  opacity: 0.72;
+  letter-spacing: 1px;
+  text-transform: none;
+}
+
+.back-portfolio-home:hover,
+.back-projects:hover {
+  opacity: 1;
+}
+
+/* Page Projets : Projet 01/02/03 */
+.project-subtitles.projects-horizontal {
+  grid-column: 1 / -1;
+  width: 100%;
+  max-height: none;
+  overflow: visible;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  position: relative;
+  margin-top: 170px !important;
+  padding: 0;
+}
+
+.project-subtitles.projects-horizontal .project-card {
+  width: 300px !important;
+  height: 145px !important;
+  border: 1px solid rgba(255,255,255,0.35);
+  padding: 20px 24px;
+  text-align: center !important;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 22px !important;
+  background: rgba(0,0,0,0.25);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  animation: none !important;
+  transform: none !important;
+}
+
+.project-subtitles.projects-horizontal .project-card:hover {
+  transform: none !important;
+  border-color: white;
+  background: rgba(255,255,255,0.06);
+}
+
+.project-subtitles.projects-horizontal .back-portfolio-home {
+  position: absolute;
+  left: 0;
+  top: -70px;
+  margin: 0;
+}
+
+/* Dans un projet ouvert : textes à gauche, image au centre */
+body.project-selected .portfolio-layout-ref {
+  display: grid !important;
+  grid-template-columns: 230px 1fr !important;
+  align-items: center !important;
+  gap: 40px !important;
+  height: 100vh !important;
+  padding: 150px 70px 80px 70px !important;
+  overflow: hidden !important;
+}
+
+body.project-selected #projectSubtitles {
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  transform: none !important;
+  grid-column: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 28px !important;
+  width: 230px !important;
+  max-height: 65vh !important;
+  overflow: visible !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.project-selected #projectSubtitles button {
+  text-align: left !important;
+}
+
+/* =========================
+   IMAGE CENTRALE
+========================= */
+
+.portfolio-center-image {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+.portfolio-center-image img {
+  max-width: 68vw;
+  max-height: 58vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+  filter: grayscale(100%);
+  opacity: 1;
+  transition: 0.6s ease;
+  cursor: none;
+}
+
+.portfolio-center-image img.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.portfolio-center-image h2 {
+  margin-top: 20px;
+  font-size: 13px;
+  font-weight: 300;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.75);
+}
+
+body.project-selected .portfolio-center-image {
+  grid-column: 2 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+body.project-selected #portfolioImage {
+  display: block !important;
+  margin: 0 auto !important;
+  max-width: 68vw !important;
+  max-height: 58vh !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+}
+
+/* Plusieurs images verticales : plans, coupes, élévations */
+.project-image-group {
+  width: min(950px, 70vw);
+  max-height: 62vh;
+  overflow-y: auto;
+  padding-right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 55px;
+  align-items: center;
+}
+
+.project-image-block {
+  width: 100%;
+  text-align: center;
+}
+
+.project-image-block img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  filter: grayscale(100%);
+}
+
+.project-image-block h3 {
+  margin-top: 16px;
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-weight: 300;
+}
+
+.project-description {
+  color: rgba(255,255,255,0.78);
+  max-width: 260px;
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.6;
+}
+
+.project-description h3 {
+  font-size: 22px;
+  margin-bottom: 14px;
+  letter-spacing: 2px;
+}
+
+.project-description p {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* =========================
+   PORTFOLIO HOME — 5 CASES
+========================= */
+
+.portfolio-home-menu {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  transform: translate(-50%, -50%);
+  width: min(1000px, 78vw);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 22px;
+  margin: 0 auto;
+}
+
+.portfolio-home-card {
+  height: 160px;
+  border: 1px solid rgba(255,255,255,0.28);
+  background: rgba(0,0,0,0.22);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: 0.35s ease;
+}
+
+.portfolio-home-card strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 23px;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+
+.portfolio-home-card span {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+}
+
+.portfolio-home-card:hover {
+  transform: translateY(-8px);
+  border-color: white;
+  background: rgba(255,255,255,0.06);
+}
+
+.portfolio-home-card:hover span {
+  color: rgba(255,255,255,0.7);
+}
+
+/* =========================
+   GALERIE
+========================= */
+
+body.gallery-open .portfolio-dark {
+  overflow-y: auto !important;
+}
+
+body.gallery-open .portfolio-layout-ref {
+  display: block;
+  height: auto;
+  min-height: 100vh;
+  padding: 220px 8vw 100px;
+  overflow: visible;
+}
+
+body.gallery-open #projectSubtitles {
+  position: fixed;
+  left: 45px;
+  top: 200px;
+  z-index: 1300;
+  display: block !important;
+  max-height: none;
+  overflow: visible;
+  padding: 0;
+}
+
+body.gallery-open #projectSubtitles button:not(.back-portfolio-home) {
+  display: none !important;
+}
+
+body.gallery-open .back-portfolio-home {
+  display: block !important;
+  color: rgba(255,255,255,0.65);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 14px !important;
+  letter-spacing: 1px;
+  text-transform: none;
+}
+
+body.gallery-open .portfolio-center-image {
+  display: block !important;
+  width: 100%;
+  text-align: center;
+}
+
+body.gallery-open #portfolioImage,
+body.gallery-open #portfolioTitle,
+body.gallery-open .portfolio-center-image > img,
+body.gallery-open .portfolio-center-image > h2 {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+.gallery-grid,
+body.gallery-open .gallery-grid {
+  width: min(1050px, 78vw);
+  margin: 70px auto 0;
+  padding-bottom: 120px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 28px;
+  max-height: none;
+  overflow: visible;
+}
+
+.gallery-card,
+body.gallery-open .gallery-card {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border: 1px solid transparent;
+  background: transparent;
+  opacity: 1;
+  transform: none;
+  animation-name: galleryFloatDifferent;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.gallery-card img,
+body.gallery-open .gallery-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  filter: grayscale(100%);
+  transition: 0.45s ease;
+}
+
+.gallery-card span,
+body.gallery-open .gallery-card span {
+  position: absolute;
+  left: 14px;
+  bottom: 12px;
+  color: rgba(255,255,255,0.58);
+  font-size: 11px;
+  letter-spacing: 2px;
+  opacity: 1;
+}
+
+.gallery-card:hover img,
+body.gallery-open .gallery-card:hover img {
+  opacity: 1;
+  filter: grayscale(0%);
+  transform: scale(1.05);
+}
+
+.gallery-card:hover,
+body.gallery-open .gallery-card:hover {
+  border-color: rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.03);
+}
+
+body.gallery-open .gallery-card:nth-child(1) { animation-duration: 5.2s; animation-delay: 0s; }
+body.gallery-open .gallery-card:nth-child(2) { animation-duration: 6.8s; animation-delay: 0.4s; }
+body.gallery-open .gallery-card:nth-child(3) { animation-duration: 4.9s; animation-delay: 0.8s; }
+body.gallery-open .gallery-card:nth-child(4) { animation-duration: 7.3s; animation-delay: 0.2s; }
+body.gallery-open .gallery-card:nth-child(5) { animation-duration: 6.1s; animation-delay: 1s; }
+body.gallery-open .gallery-card:nth-child(6) { animation-duration: 5.5s; animation-delay: 0.6s; }
+body.gallery-open .gallery-card:nth-child(7) { animation-duration: 7.8s; animation-delay: 1.2s; }
+body.gallery-open .gallery-card:nth-child(8) { animation-duration: 4.7s; animation-delay: 0.3s; }
+body.gallery-open .gallery-card:nth-child(9) { animation-duration: 6.6s; animation-delay: 0.9s; }
+body.gallery-open .gallery-card:nth-child(10) { animation-duration: 5.9s; animation-delay: 0.1s; }
+body.gallery-open .gallery-card:nth-child(11) { animation-duration: 7.1s; animation-delay: 0.7s; }
+body.gallery-open .gallery-card:nth-child(12) { animation-duration: 5.3s; animation-delay: 1.1s; }
+
+@keyframes galleryFloatDifferent {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-18px); }
+  100% { transform: translateY(0); }
+}
+
+/* =========================
+   FLÈCHES CACHÉES
+========================= */
+
+.portfolio-section-arrows,
+.portfolio-arrow {
+  display: none !important;
+}
+
+/* =========================
+   MODAL IMAGE
+========================= */
+
+.image-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  background: rgba(0,0,0,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: 0.4s ease;
+}
+
+.image-modal.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.image-modal img {
+  max-width: 92vw;
+  max-height: 88vh;
+  object-fit: contain;
+}
+
+.image-modal-close {
+  position: fixed;
+  top: 35px;
+  right: 45px;
+  color: white;
+  border: 1px solid rgba(255,255,255,0.4);
+  padding: 10px 18px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: rgba(0,0,0,0.4);
+}
+
+/* =========================
+   ABOUT / CONTACT
+========================= */
+
+.page-space {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.72);
+  color: white;
+  overflow-y: auto;
+  padding: 130px 70px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.page-space.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  animation: openSpace 1.1s cubic-bezier(.77, 0, .18, 1) forwards;
+}
+
+.space-close {
+  position: fixed;
+  top: 95px;
+  right: 50px;
+  z-index: 1000;
+  color: rgba(255,255,255,0.85);
+  border: 1px solid rgba(255,255,255,0.35);
+  padding: 10px 18px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(4px);
+  transition: 0.3s ease;
+}
+
+.space-close:hover {
+  color: white;
+  border-color: white;
+}
+
+.about-container {
+  max-width: 1100px;
+  margin: auto;
+}
+
+.about-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 80px;
+}
+
+.about-header h2 {
+  font-size: clamp(42px, 6vw, 80px);
+  letter-spacing: 6px;
+  font-weight: 400;
+}
+
+.subtitle {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 18px;
+  margin-top: 10px;
+  opacity: 0.7;
+}
+
+.about-photo {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.55);
+}
+
+.about-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(100%);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 55px;
+}
+
+.about-block {
+  border-left: 1px solid rgba(255,255,255,0.45);
+  padding-left: 20px;
+}
+
+.about-block h3 {
+  color: rgba(255,255,255,0.8);
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-size: 20px;
+  font-weight: 400;
+  margin-bottom: 18px;
+}
+
+.about-block p {
+  color: rgba(255,255,255,0.8);
+  font-size: 14px;
+  line-height: 1.65;
+  margin-bottom: 12px;
+}
+
+.about-block b {
+  color: white;
+}
+
+.contact-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contact-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.82);
+  background: transparent;
+  transition: 0.3s ease;
+}
+
+.contact-link span {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  opacity: 0.6;
+}
+
+.contact-link strong {
+  font-size: 13px;
+  font-weight: 300;
+}
+
+.contact-link:hover {
+  border-color: rgba(255,255,255,0.65);
+  color: white;
+  transform: translateX(6px);
+}
+
+.contact-address {
+  margin-top: 18px;
+  color: rgba(255,255,255,0.55);
+  font-size: 12px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1200px) {
+  .cursor,
+  .cursor-trail {
+    display: none !important;
+  }
+
+  body,
+  button,
+  a {
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 900px) {
+  header {
+    padding: 25px;
+  }
+
+  nav {
+    gap: 16px;
+  }
+
+  .portfolio-dark {
+    overflow-y: auto;
+  }
+
+  .portfolio-layout-ref,
+  body.project-selected .portfolio-layout-ref {
+    grid-template-columns: 1fr !important;
+    height: auto !important;
+    min-height: 100vh;
+    padding: 145px 28px 95px !important;
+  }
+
+  .portfolio-section-header {
+    top: 95px;
+    width: 90%;
+  }
+
+  .portfolio-section-header h1 {
+    font-size: clamp(34px, 9vw, 60px);
+  }
+
+  .portfolio-section-header h1 span {
+    display: block;
+    margin-left: 0;
+    margin-top: 8px;
+  }
+
+  body.project-selected .portfolio-section-header h1 {
+    font-size: clamp(28px, 8vw, 44px);
+  }
+
+  .project-subtitles.projects-horizontal {
+    flex-direction: column;
+    gap: 18px;
+    margin-top: 40px !important;
+  }
+
+  .project-subtitles.projects-horizontal .back-portfolio-home {
+    position: static;
+    margin-bottom: 20px;
+  }
+
+  .project-subtitles.projects-horizontal .project-card {
+    width: 80vw !important;
+    height: 110px !important;
+  }
+
+  body.project-selected #projectSubtitles {
+    width: 100% !important;
+    max-height: none !important;
+    gap: 22px !important;
+  }
+
+  .portfolio-center-image,
+  body.project-selected .portfolio-center-image {
+    grid-column: 1 !important;
+  }
+
+  .portfolio-center-image img,
+  body.project-selected #portfolioImage {
+    max-width: 88vw !important;
+    max-height: 50vh !important;
+  }
+
+  .portfolio-home-menu {
+    grid-template-columns: 1fr;
+    width: 80vw;
+    gap: 16px;
+  }
+
+  .portfolio-home-card {
+    height: 100px;
+  }
+
+  body.gallery-open .portfolio-layout-ref {
+    padding: 180px 25px 90px;
+  }
+
+  body.gallery-open #projectSubtitles {
+    position: static;
+    margin-bottom: 25px;
+  }
+
+  body.gallery-open .gallery-grid {
+    width: 88vw;
+    margin-top: 40px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+
+  .project-image-group {
+    width: 88vw;
+    max-height: 55vh;
+  }
+
+  .about-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 25px;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-space {
+    padding: 110px 28px;
+  }
+}
+
+body.gallery-open .gallery-card img {
+  opacity: 1 !important;
+  filter: grayscale(100%);
+}
+
+.project-image-block img {
+  cursor: none;
+}
+
+.project-image-block img:hover {
+  opacity: 0.85;
+}
+
+/* Galerie : faire bouger tous les carrés, même après IMG 012 */
+body.gallery-open .gallery-card {
+  animation: galleryFloatAll 6s ease-in-out infinite !important;
+}
+
+/* Variations automatiques pour toutes les images */
+body.gallery-open .gallery-card:nth-child(3n + 1) {
+  animation-duration: 5.4s !important;
+  animation-delay: 0.1s !important;
+}
+
+body.gallery-open .gallery-card:nth-child(3n + 2) {
+  animation-duration: 6.8s !important;
+  animation-delay: 0.5s !important;
+}
+
+body.gallery-open .gallery-card:nth-child(3n + 3) {
+  animation-duration: 7.6s !important;
+  animation-delay: 0.9s !important;
+}
+
+body.gallery-open .gallery-card:nth-child(4n) {
+  animation-duration: 8.2s !important;
+}
+
+body.gallery-open .gallery-card:nth-child(5n) {
+  animation-duration: 5.9s !important;
+}
+
+/* Mouvement haut-bas */
+@keyframes galleryFloatAll {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-18px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Dessin 01 : slider automatique horizontal */
+.drawing-slider {
+  width: min(1050px, 72vw);
+  height: 60vh;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.drawing-slider-track {
+  display: flex;
+  align-items: center;
+  gap: 55px;
+
+  width: max-content;
+  animation: drawingSlide 35s linear infinite;
+}
+
+.drawing-slider-track img {
+  width: auto;
+  height: 52vh;
+  max-width: 70vw;
+  object-fit: contain;
+
+  filter: grayscale(100%);
+  opacity: 0.9;
+  cursor: none;
+}
+
+.drawing-slider-track img:hover {
+  opacity: 1;
+}
+
+.drawing-slider:hover .drawing-slider-track {
+  animation-play-state: paused;
+}
+
+@keyframes drawingSlide {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.drawing-slider + #portfolioTitle {
+  margin-top: 28px !important;
+  font-size: 13px !important;
+  letter-spacing: 5px !important;
+  text-transform: uppercase !important;
+  color: rgba(255,255,255,0.75) !important;
+}
+
+/* =========================
+   MAQUETTES — IMAGES PLUS GRANDES
+   Pour agrandir encore : change 78vw en 82vw / 86vw / 90vw
+========================= */
+
+body.maquettes-open .portfolio-dark {
+  overflow-y: auto !important;
+}
+
+body.maquettes-open .portfolio-layout-ref {
+  height: auto !important;
+  min-height: 100vh !important;
+  overflow: visible !important;
+  padding-bottom: 180px !important;
+}
+
+body.maquettes-open .portfolio-center-image {
+  grid-column: 2 !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  padding-top: 20px !important;
+  height: auto !important;
+  min-height: 70vh !important;
+}
+
+body.maquettes-open #projectImageGroup {
+  width: 78vw !important;
+  max-width: 1450px !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding-bottom: 160px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 90px !important;
+}
+
+body.maquettes-open #projectImageGroup .project-image-block {
+  width: 100% !important;
+  max-width: 1450px !important;
+  text-align: center !important;
+}
+
+body.maquettes-open #projectImageGroup .project-image-block img {
+  width: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  height: auto !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: 0 auto !important;
+  filter: grayscale(100%) !important;
+}
+
+body.maquettes-open #portfolioTitle {
+  display: none !important;
+}
+
+/* Garder les écritures de gauche visibles dans Maquettes */
+body.maquettes-open #projectSubtitles {
+  display: flex !important;
+}
+
+@media (max-width: 900px) {
+  body.maquettes-open #projectImageGroup {
+    width: 92vw !important;
+  }
+}
+
+/* Maquettes : garder le menu de gauche fixe */
+body.maquettes-open #projectSubtitles {
+  position: fixed !important;
+  top: 250px !important;
+  left: 45px !important;
+  z-index: 50 !important;
+}
+
+/* La page peut scroller pour les images */
+body.maquettes-open {
+  overflow-y: auto !important;
+}
+
+/* Maquettes : recentrer les images et les réduire un peu */
+body.maquettes-open .portfolio-center-image {
+  margin-left: 0 !important;
+  padding-left: 10px !important;
+  padding-right: 120px !important;
+  padding-bottom: 200px !important;
+
+  display: flex !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+}
+
+body.maquettes-open #projectImageGroup {
+  width: 68vw !important;
+  margin: 0 auto !important;
+}
+
+/* Réglage séparé de chaque maquette */
+body.maquettes-open #projectImageGroup.maquette-01 {
+  transform: translateY(-200px) !important;
+}
+
+body.maquettes-open #projectImageGroup.maquette-02 {
+  transform: translateY(-20px) !important;
+}
+
+body.maquettes-open #projectImageGroup.maquette-03 {
+  transform: translate(-80px, 60px) !important;
+}
+
+/* =========================
+   ART — UNE LIGNE VERTICALE QUI GLISSE
+========================= */
+
+body.art-open .portfolio-dark {
+  overflow: hidden !important;
+}
+
+body.art-open .portfolio-layout-ref {
+  height: 100vh !important;
+  overflow: hidden !important;
+}
+
+body.art-open #projectSubtitles {
+  position: fixed !important;
+  left: 45px !important;
+  top: 200px !important;
+  z-index: 1300 !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+body.art-open #projectSubtitles button:not(.back-portfolio-home) {
+  display: none !important;
+}
+
+.art-scroll {
+  width: min(420px, 34vw);
+  height: 70vh;
+  overflow: hidden;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  margin: 0 auto;
+}
+
+.art-scroll-track {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+
+  animation: artScrollDown 28s linear infinite;
+}
+
+.art-scroll-card {
+  position: relative;
+  width: 100%;
+  background: transparent;
+  border: 1px solid transparent;
+  overflow: hidden;
+}
+
+.art-scroll-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+
+  filter: grayscale(100%);
+  opacity: 0.9;
+  transition: 0.4s ease;
+}
+
+.art-scroll-card span {
+  position: absolute;
+  left: 12px;
+  bottom: 10px;
+
+  color: rgba(255,255,255,0.65);
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+.art-scroll-card:hover img {
+  opacity: 1;
+  filter: grayscale(0%);
+  transform: scale(1.03);
+}
+
+.art-scroll:hover .art-scroll-track {
+  animation-play-state: paused;
+}
+
+@keyframes artScrollDown {
+  0% {
+    transform: translateY(-50%);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Position de la colonne qui glisse dans ART */
+.art-scroll {
+  width: min(460px, 36vw);
+  height: 72vh;
+  overflow: hidden;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  margin-top: 80px !important;
+  margin-left: auto !important;
+  margin-right: 450px !important;
+}
+
+.portfolio-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  margin-top: 130px;
+}
+
+.portfolio-card {
+  width: 220px;
+  height: 190px;
+  position: relative;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid transparent;
+  overflow: hidden;
+}
+
+/* logo visible au début */
+.portfolio-logo {
+  width: 95px;
+  height: 95px;
+  object-fit: contain;
+  opacity: 0.9;
+  filter: grayscale(100%);
+  transition: all 0.4s ease;
+}
+
+/* la case avec écriture est cachée au début */
+.portfolio-hover {
+  position: absolute;
+  inset: 0;
+
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(2px);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  transform: scale(0.96);
+  transition: all 0.4s ease;
+}
+
+/* au hover : la case apparaît */
+.portfolio-card:hover .portfolio-hover {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* au hover : le logo peut disparaître doucement */
+.portfolio-card:hover .portfolio-logo {
+  opacity: 0.18;
+  transform: scale(1.12);
+}
+
+.portfolio-hover h2 {
+  color: white;
+  font-family: Georgia, serif;
+  font-size: 28px;
+  margin: 0 0 10px 0;
+}
+
+.portfolio-hover p {
+  color: rgba(255, 255, 255, 0.45);
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  letter-spacing: 8px;
+  margin: 0;
+}
+
+/* Logos visibles avant hover */
+.portfolio-home-card {
+  position: relative !important;
+  overflow: hidden !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.portfolio-logo {
+  width: 90px !important;
+  height: 90px !important;
+  object-fit: contain !important;
+  opacity: 0.9 !important;
+  filter: grayscale(100%) !important;
+  transition: 0.4s ease !important;
+}
+
+/* Texte caché au début */
+.portfolio-hover {
+  position: absolute !important;
+  inset: 0 !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+
+  opacity: 0 !important;
+  background: rgba(0, 0, 0, 0.35) !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  transition: 0.4s ease !important;
+}
+
+/* Au hover : la case avec écriture apparaît */
+.portfolio-home-card:hover .portfolio-hover {
+  opacity: 1 !important;
+}
+
+/* Au hover : le logo devient discret */
+.portfolio-home-card:hover .portfolio-logo {
+  opacity: 0.18 !important;
+  transform: scale(1.12) !important;
+}
+
+.portfolio-hover strong {
+  color: white !important;
+  font-family: Georgia, serif !important;
+  font-size: 28px !important;
+}
+
+.portfolio-hover span {
+  color: rgba(255, 255, 255, 0.45) !important;
+  font-size: 13px !important;
+  letter-spacing: 8px !important;
+  margin-top: 10px !important;
+}
+/* =========================
+   CORRECTION FINALE — PORTFOLIO LOGOS
+   Logos seuls au début / cadre + texte au hover
+========================= */
+
+.portfolio-home-menu {
+  position: absolute !important;
+  left: 47% !important;
+  top: 54% !important;
+  transform: translate(-50%, -50%) !important;
+
+  width: min(1120px, 82vw) !important;
+
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr) !important;
+  gap: 38px !important;
+
+  margin: 0 auto !important;
+}
+
+/* Les cases existent mais elles sont invisibles au début */
+.portfolio-home-card {
+  position: relative !important;
+
+  width: 210px !important;
+  height: 210px !important;
+
+  background: transparent !important;
+  border: 1px solid transparent !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  padding: 0 !important;
+  overflow: hidden !important;
+  cursor: none !important;
+
+  transition: 0.4s ease !important;
+}
+
+/* Logo visible au début */
+.portfolio-home-card .portfolio-logo {
+  width: 190px !important;
+  height: 190px !important;
+
+  object-fit: contain !important;
+  display: block !important;
+
+  opacity: 1 !important;
+  filter: grayscale(100%) !important;
+
+  transition: 0.45s ease !important;
+}
+
+/* Cadre + texte cachés au début */
+.portfolio-home-card .portfolio-hover {
+  position: absolute !important;
+  inset: 0 !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  background: rgba(0, 0, 0, 0.28) !important;
+  border: 1px solid rgba(255, 255, 255, 0.32) !important;
+  backdrop-filter: blur(2px) !important;
+
+  opacity: 0 !important;
+  visibility: hidden !important;
+
+  transform: scale(0.96) !important;
+  transition: 0.45s ease !important;
+
+  pointer-events: none !important;
+}
+
+/* Au passage de la souris : le cadre apparaît */
+.portfolio-home-card:hover {
+  border-color: transparent !important;
+  background: transparent !important;
+  transform: translateY(-6px) !important;
+}
+
+/* Au hover : texte + cadre visibles */
+.portfolio-home-card:hover .portfolio-hover {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: scale(1) !important;
+}
+
+/* Au hover : logo en arrière-plan discret */
+.portfolio-home-card:hover .portfolio-logo {
+  opacity: 0.14 !important;
+  transform: scale(1.18) !important;
+}
+
+/* Titre français */
+.portfolio-home-card .portfolio-hover strong {
+  color: white !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: 30px !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  margin: 0 0 12px 0 !important;
+  padding: 0 !important;
+  text-align: center !important;
+}
+
+/* Sous-titre anglais */
+.portfolio-home-card .portfolio-hover span {
+  color: rgba(255, 255, 255, 0.48) !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 12px !important;
+  letter-spacing: 7px !important;
+  text-transform: uppercase !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: center !important;
+}
+
+/* Enlever les anciens styles inutiles s’ils existent */
+.portfolio-grid,
+.portfolio-card {
+  display: none !important;
+}
